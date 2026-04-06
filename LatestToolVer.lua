@@ -12,6 +12,7 @@ local function log(str)
     print(prefix .. "" .. str)
     hook.Run("AddNotify", prefix .. "" .. str, NOTIFY_GENERIC, 5)
 end
+function Initalize()
 
 local function RetryLoop(attempt)
     log("WARNING: a game crash is about to happen, ABORT SHIP AND RETRY NOW!")
@@ -329,7 +330,7 @@ if gui.IsGameUIVisible() then
 end
 
 log("Initalized!")
-RunConsoleCommand("play", "hl1/fvox/bell.wav")
+RunConsoleCommand("play", "friends/friend_join.wav")
 timer.Simple(1,function()
     hook.Run("AddNotify", "Type " .. currentPrefix .. "help In chat to get started!", NOTIFY_GENERIC, 5)
     timer.Simple(1,function()
@@ -338,4 +339,19 @@ timer.Simple(1,function()
     print('alias c4spam "ent_create swcs_planted_c4 modelscale 0"')
     print('alias bloodtrailall "ent_create point_hurt enabled 1 spawnflags 1 damageradius 30000000000000000000000000 DamageType 2097152 damage 0"')
 end)
+end)
+end
+http.Fetch("https://github.com/thesecretsauce67420/my-tools/raw/refs/heads/main/version.txt", function(version)
+     version = version
+     if tonumber(version) > tonumber(ver) then
+         log("Your version is out of date! retrieving latest version...")
+         http.Fetch("https://github.com/thesecretsauce67420/my-tools/raw/refs/heads/main/LatestToolVer.lua", function(code)
+              log("Retrieved latest ver, running in 2 seconds..")
+              RunConsoleCommand("play", "hl1/fvox/bell.wav")
+              timer.Simple(2,function() RunString(code) end)
+         end, 
+         function(err) timer.Simple(2,function() log("Failed to get latest version. Error: " .. err) RunConsoleCommand("play", "hl1/fvox/fuzz.wav") end) end)
+     else
+         Initalize()
+     end
 end)
