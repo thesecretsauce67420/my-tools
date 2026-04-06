@@ -1,7 +1,7 @@
 -- Variables:
 local currentPrefix = "/"
 local targetClass = "npc_grenade_bugbait"
-local ver = "4.68"
+local ver = "4.69"
 local oldAngles
 local function log(str)
     local prefix = "[Socrates Toolz " .. "v" .. ver .. "] "
@@ -9,7 +9,6 @@ local function log(str)
         Color(100, 100, 255), prefix,
         Color(100, 255, 100), str
     )
-    print(prefix .. "" .. str)
     hook.Run("AddNotify", prefix .. "" .. str, NOTIFY_GENERIC, 5)
 end
 function Initalize()
@@ -353,6 +352,10 @@ http.Fetch("https://github.com/thesecretsauce67420/my-tools/raw/refs/heads/main/
               timer.Simple(2,function() RunString(code) end)
          end, 
          function(err) timer.Simple(2,function() log("Failed to get latest version. Error: " .. err) RunConsoleCommand("play", "hl1/fvox/fuzz.wav") end) end)
+     elseif tonumber(version) < tonumber(ver)
+         log("Your version is somehow more up to date? Please make a github issue to report this issue, he mightve forgotten to update version.txt")
+         log("Initalizing in 2 seconds..")
+         timer.Simple(2,function() Initalize() end)
      else
          log("Your version is up to date! initalizing in 2 seconds...")
          timer.Simple(2,function() Initalize() end)
