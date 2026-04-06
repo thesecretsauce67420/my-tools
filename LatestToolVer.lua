@@ -1,7 +1,7 @@
 -- Variables:
 local currentPrefix = "/"
 local targetClass = "npc_grenade_bugbait"
-local ver = "4.65"
+local ver = "4.66"
 local oldAngles
 local function log(str)
     local prefix = "[Socrates Toolz " .. "v" .. ver .. "] "
@@ -324,11 +324,6 @@ hook.Add("OnPlayerChat", "DynamicPrefixChatCommands", function(ply, text)
     end
     return true
 end)
-
-if gui.IsGameUIVisible() then
-   gui.HideGameUI()
-end
-
 log("Initalized!")
 RunConsoleCommand("play", "friends/friend_join.wav")
 timer.Simple(1,function()
@@ -340,6 +335,10 @@ timer.Simple(1,function()
     print('alias bloodtrailall "ent_create point_hurt enabled 1 spawnflags 1 damageradius 30000000000000000000000000 DamageType 2097152 damage 0"')
 end)
 end)
+end
+
+if gui.IsGameUIVisible() then
+   gui.HideGameUI()
 end
 
 http.Fetch("https://github.com/thesecretsauce67420/my-tools/raw/refs/heads/main/version.txt", function(version)
