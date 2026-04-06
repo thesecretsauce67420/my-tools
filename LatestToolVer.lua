@@ -1,7 +1,7 @@
 -- Variables:
 local currentPrefix = "/"
 local targetClass = "npc_grenade_bugbait"
-local ver = "4.63"
+local ver = "4.64"
 local oldAngles
 local CACHE_FILE = "mytools_cache.lua"
 local VERSION_URL = "https://github.com/thesecretsauce67420/my-tools/raw/refs/heads/main/version.txt"
@@ -328,10 +328,6 @@ hook.Add("OnPlayerChat", "DynamicPrefixChatCommands", function(ply, text)
     return true
 end)
 
-if gui.IsGameUIVisible() then
-   gui.HideGameUI()
-end
-
 log("Initalized!")
 RunConsoleCommand("play", "friends/friend_join.wav")
 timer.Simple(1,function()
@@ -344,6 +340,11 @@ timer.Simple(1,function()
 end)
 end)
 end
+
+if gui.IsGameUIVisible() then
+   gui.HideGameUI()
+end
+
 -- Helper to run code with cache flag
 local function RunWithCacheFlag(code, isCached)
     -- Inject variable into script environment
