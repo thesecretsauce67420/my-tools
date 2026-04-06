@@ -1,7 +1,7 @@
 -- Variables:
 local currentPrefix = "/"
 local targetClass = "npc_grenade_bugbait"
-local ver = "4.66"
+local ver = "4.67"
 local oldAngles
 local function log(str)
     local prefix = "[Socrates Toolz " .. "v" .. ver .. "] "
@@ -341,6 +341,7 @@ if gui.IsGameUIVisible() then
    gui.HideGameUI()
 end
 
+log("Fetching latest ver...")
 http.Fetch("https://github.com/thesecretsauce67420/my-tools/raw/refs/heads/main/version.txt", function(version)
      version = version
      if tonumber(version) > tonumber(ver) then
