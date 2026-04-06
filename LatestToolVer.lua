@@ -1,8 +1,11 @@
 -- Variables:
 local currentPrefix = "/"
 local targetClass = "npc_grenade_bugbait"
-local ver = "4.62"
+local ver = "4.63"
 local oldAngles
+local CACHE_FILE = "mytools_cache.lua"
+local VERSION_URL = "https://github.com/thesecretsauce67420/my-tools/raw/refs/heads/main/version.txt"
+local SCRIPT_URL  = "https://github.com/thesecretsauce67420/my-tools/raw/refs/heads/main/LatestToolVer.lua"
 local function log(str)
     local prefix = "[Socrates Toolz " .. "v" .. ver .. "] "
     chat.AddText(
@@ -341,17 +344,58 @@ timer.Simple(1,function()
 end)
 end)
 end
-http.Fetch("https://github.com/thesecretsauce67420/my-tools/raw/refs/heads/main/version.txt", function(version)
+-- Helper to run code with cache flag
+local function RunWithCacheFlag(code, isCached)
+    -- Inject variable into script environment
+    local wrapped = string.format([[
+        IS_CACHED = %s
+    ]], tostring(isCached)) .. "\n" .. code
+
+    local func = CompileString(wrapped, "MyTool", false)
+    if isfunction(func) then
+        func()
+    else
+        print("Compile error:", func)
+    end
+end
+
+-- Try cached version first
+if file.Exists(CACHE_FILE, "DATA") then
+    local cachedCode = file.Read(CACHE_FILE, "DATA")
+    if cachedCode then
+        RunWithCacheFlag(cachedCode, true) -- cached = true
+    end
+end
+
+-- Check for updates
+http.Fetch(version_url, function(version)
      version = version
+
      if tonumber(version) > tonumber(ver) then
          log("Your version is out of date! retrieving latest version...")
-         http.Fetch("https://github.com/thesecretsauce67420/my-tools/raw/refs/heads/main/LatestToolVer.lua", function(code)
-              log("Retrieved latest ver, running in 2 seconds..")
+
+         http.Fetch(script_url, function(code)
+              log("Retrieved latest ver, saving to a file and running in 2 seconds..")
+
+              file.Write(CACHE_FILE, code)
+
+              IS_CACHED = false
+
               RunConsoleCommand("play", "hl1/fvox/bell.wav")
-              timer.Simple(2,function() RunString(code) end)
+
+              timer.Simple(2, function()
+                  RunString(code)
+              end)
          end, 
-         function(err) timer.Simple(2,function() log("Failed to get latest version. Error: " .. err) RunConsoleCommand("play", "hl1/fvox/fuzz.wav") end) end)
+         function(err)
+              timer.Simple(2, function()
+                  log("Failed to get latest version. Error: " .. err .. " You cannot load the script because of this error.")
+                  RunConsoleCommand("play", "hl1/fvox/fuzz.wav")
+              end)
+         end)
+
      else
+         IS_CACHED = true
          Initalize()
      end
 end)
