@@ -352,7 +352,7 @@ http.Fetch("https://github.com/thesecretsauce67420/my-tools/raw/refs/heads/main/
               timer.Simple(2,function() RunString(code) end)
          end, 
          function(err) timer.Simple(2,function() log("Failed to get latest version. Error: " .. err) RunConsoleCommand("play", "hl1/fvox/fuzz.wav") end) end)
-     elseif tonumber(version) < tonumber(ver)
+     elseif tonumber(version) < tonumber(ver) then
          log("Your version is somehow more up to date? Please make a github issue to report this issue, he mightve forgotten to update version.txt")
          log("Initalizing in 2 seconds..")
          timer.Simple(2,function() Initalize() end)
