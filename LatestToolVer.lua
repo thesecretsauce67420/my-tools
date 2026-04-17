@@ -1,6 +1,6 @@
 -- Variables:
 local currentPrefix = "/"
-local ver = "4.69"
+local ver = "4.7"
 local oldAngles
 local function log(str)
     local prefix = "[Socrates Toolz " .. "v" .. ver .. "] "
