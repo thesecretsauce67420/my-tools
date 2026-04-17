@@ -1,6 +1,5 @@
 -- Variables:
 local currentPrefix = "/"
-local targetClass = "npc_grenade_bugbait"
 local ver = "4.69"
 local oldAngles
 local function log(str)
@@ -12,39 +11,6 @@ local function log(str)
     hook.Run("AddNotify", prefix .. "" .. str, NOTIFY_GENERIC, 5)
 end
 function Initalize()
-
-local function RetryLoop(attempt)
-    log("WARNING: a game crash is about to happen, ABORT SHIP AND RETRY NOW!")
-    RunConsoleCommand("retry")
-end
-
-local function EntityExists()
-    local ply = LocalPlayer()
-    if not IsValid(ply) then return false end
-
-    local nearby = ents.FindInSphere(ply:GetPos(), 20)
-    local count = 0
-
-    for _, ent in ipairs(nearby) do
-        if ent:GetClass() == targetClass then
-            count = count + 1
-            if count > 50 then
-                return true
-            end
-        end
-    end
-
-    return false
-end
-
--- Start watching
-hook.Add("Think", "EntityRetryWatcher", function()
-    if EntityExists() then
-        RetryLoop()
-        hook.Remove("Think", "EntityRetryWatcher") -- run only once
-    end
-end)
-
 local function SetChatPrefix(newPrefix)
     currentPrefix = newPrefix
     log("Chat Command Prefix is now: " .. newPrefix)
